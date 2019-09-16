@@ -9,4 +9,23 @@ DEPS_DIR="${3}"
 DEPS_IDX="${4}"
 
 BUILDPACK_DIR=$(dirname $(readlink -f ${BASH_SOURCE%/*}))
-echo "-----> tesseract-buildpack Buildpack version $(cat $BUILDPACK_DIR/VERSION)"
+echo "-----> tesseract buildpack version $(cat $BUILDPACK_DIR/VERSION)"
+
+TESSERACT_OCR_VERSION=3.04.01
+TESSERACT_OCR_DATA_VERSION=3.04.00
+
+TESSERACT_OCR_TGZ=tesseract-ocr-$TESSERACT_OCR_VERSION.tar.gz
+
+INSTALL_DIR=$BUILD_DIR/vendor/tesseract-ocr/
+INSTALL_DIR_TRAINING_DATA=$BUILD_DIR/vendor/tessdata
+INCLUDE_DIR=$BUILD_DIR/vendor/tesseract-ocr/include
+LIB_DIR=$BUILD_DIR/vendor/tesseract-ocr/lib
+TRAINING_DATA_DIR=${HOME}/vendor
+TESSERACT_OCR_DIR=${HOME}/vendor/tesseract-ocr
+ENVSCRIPT=$BUILD_DIR/.profile.d/tesseract-ocr.sh
+
+TESSERACT_OCR_LANGUAGES=eng
+
+echo "Unpacking Tesseract-OCR binaries"
+mkdir -p $INSTALL_DIR
+tar -zxvf $TESSERACT_OCR_TGZ -C $INSTALL_DIR
