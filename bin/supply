@@ -8,32 +8,33 @@ CACHE_DIR="${2}"
 DEPS_DIR="${3}"
 DEPS_IDX="${4}"
 
-BUILDPACK_DIR=$(dirname $(readlink -f ${BASH_SOURCE%/*}))
-echo "-----> tesseract buildpack version $(cat $BUILDPACK_DIR/VERSION)"
-
+# Bump versions to update and don't forget to include them in buildpack
 TESSERACT_OCR_VERSION=3.04.01
 TESSERACT_OCR_DATA_VERSION=3.04.00
 
+
+BUILDPACK_DIR=$(dirname $(readlink -f ${BASH_SOURCE%/*}))
+echo "-----> tesseract buildpack version $(cat $BUILDPACK_DIR/VERSION)"
+
 TESSERACT_OCR_TGZ=tesseract-ocr-$TESSERACT_OCR_VERSION.tar.gz
 
-INSTALL_DIR=$BUILD_DIR/vendor/tesseract-ocr/
-INCLUDE_DIR=$BUILD_DIR/vendor/tesseract-ocr/include
-LIB_DIR=$BUILD_DIR/vendor/tesseract-ocr/lib
-TRAINING_DATA_DIR=${HOME}/vendor
-TESSERACT_OCR_DIR=${HOME}/vendor/tesseract-ocr
+
+TESSERACT_INSTALL_DIR=$DEPS_DIR/$DEPS_IDX/tesseract-ocr
+TESSERACT_DATA_DIR=$TESSERACT_INSTALL_DIR/data
+
 ENVSCRIPT=$BUILD_DIR/.profile.d/tesseract-ocr.sh
 
 TESSERACT_OCR_LANGUAGES=eng
 
 # create tesseract lib and more folders
-TESSERACT_DEPS="${DEPS_DIR}/${DEPS_IDX}"
-mkdir -p $TESSERACT_DEPS
+mkdir -p $TESSERACT_INSTALL_DIR
 
 echo "Unpacking Tesseract-OCR binaries"
-tar -zxvf $BUILDPACK_DIR/$TESSERACT_OCR_TGZ -C $TESSERACT_DEPS
+tar -zxvf $BUILDPACK_DIR/$TESSERACT_OCR_TGZ -C $TESSERACT_INSTALL_DIR
 
 echo 'Getting Tesseract-OCR training data'
-mkdir -p $TESSERACT_DEPS/data
+
+mkdir -p $TESSERACT_DATA_DIR
 if [ $TESSERACT_OCR_LANGUAGES ]
 then
    array=(${TESSERACT_OCR_LANGUAGES//,/ })
@@ -41,12 +42,12 @@ then
    do
      lang="${array[i]}"
      echo $lang 'training data'
-     curl https://raw.githubusercontent.com/tesseract-ocr/tessdata/$TESSERACT_OCR_DATA_VERSION/$lang.traineddata > $TESSERACT_DEPS/data/$lang.traineddata
+     curl https://raw.githubusercontent.com/tesseract-ocr/tessdata/$TESSERACT_OCR_DATA_VERSION/$lang.traineddata > $TESSERACT_DATA_DIR/$lang.traineddata
    done
 fi
 
 echo "Building runtime environment for Tesseract-OCR"
 mkdir -p $BUILD_DIR/.profile.d
-echo "export PATH=\"$TESSERACT_DEPS/bin:\$PATH\"" > $ENVSCRIPT
-echo "export LD_LIBRARY_PATH=\"$TESSERACT_DEPS/lib:\$LD_LIBRARY_PATH\"" >> $ENVSCRIPT
-echo "export TESSDATA_PREFIX=\"$TESSERACT_DEPS/data/\"" >> $ENVSCRIPT
+echo "export PATH=\"$TESSERACT_INSTALL_DIR/bin:\$PATH\"" > $ENVSCRIPT
+echo "export LD_LIBRARY_PATH=\"$TESSERACT_INSTALL_DIR/lib:\$LD_LIBRARY_PATH\"" >> $ENVSCRIPT
+echo "export TESSDATA_PREFIX=\"$TESSERACT_INSTALL_DIR/data/\"" >> $ENVSCRIPT
