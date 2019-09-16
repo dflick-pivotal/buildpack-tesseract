@@ -45,4 +45,15 @@ then
    done
 fi
 
+echo "Building runtime environment for Tesseract-OCR"
+mkdir -p $BUILD_DIR/.profile.d
+echo "export PATH=\"$TESSERACT_DEPS/bin:\$PATH\"" > $ENVSCRIPT
+echo "export LD_LIBRARY_PATH=\"$TESSERACT_DEPS/lib:\$LD_LIBRARY_PATH\"" >> $ENVSCRIPT
+echo "export TESSDATA_PREFIX=\"$TESSERACT_DEPS/data/\"" >> $ENVSCRIPT
+
+echo "Installing tesserocr and dependencies"
+pip install cython==0.25.2
+export CPPFLAGS="-I/$TESSERACT_DEPS/include"
+export LDFLAGS="-L/$TESSERACT_DEPS/lib"
+pip install tesserocr==2.1.3
 
