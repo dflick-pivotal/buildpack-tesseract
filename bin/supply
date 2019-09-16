@@ -24,27 +24,15 @@ TESSERACT_DATA_DIR=$TESSERACT_INSTALL_DIR/data
 
 ENVSCRIPT=$BUILD_DIR/.profile.d/tesseract-ocr.sh
 
-TESSERACT_OCR_LANGUAGES=eng
-
 # create tesseract lib and more folders
 mkdir -p $TESSERACT_INSTALL_DIR
 
 echo "Unpacking Tesseract-OCR binaries"
 tar -zxvf $BUILDPACK_DIR/$TESSERACT_OCR_TGZ -C $TESSERACT_INSTALL_DIR
 
-echo 'Getting Tesseract-OCR training data'
-
+echo 'Copy Tesseract-OCR training data'
 mkdir -p $TESSERACT_DATA_DIR
-if [ $TESSERACT_OCR_LANGUAGES ]
-then
-   array=(${TESSERACT_OCR_LANGUAGES//,/ })
-   for i in "${!array[@]}"
-   do
-     lang="${array[i]}"
-     echo $lang 'training data'
-     curl https://raw.githubusercontent.com/tesseract-ocr/tessdata/$TESSERACT_OCR_DATA_VERSION/$lang.traineddata > $TESSERACT_DATA_DIR/$lang.traineddata
-   done
-fi
+cp $BUILDPACK_DIR/resources/ocr-data/* $TESSERACT_DATA_DIR
 
 echo "Building runtime environment for Tesseract-OCR"
 mkdir -p $BUILD_DIR/.profile.d
