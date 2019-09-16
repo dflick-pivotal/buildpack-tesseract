@@ -1,4 +1,4 @@
-# Heroku Buildpack Tesserocr
+# Buildpack Tesseract
 
 This buildpack installs [tesserocr](https://github.com/sirfz/tesserocr) (Python wrapper for [Tesseract](https://github.com/tesseract-ocr/tesseract) API) and it's necessary dependencies.  
 
