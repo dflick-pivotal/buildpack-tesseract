@@ -39,3 +39,6 @@ echo "export LD_LIBRARY_PATH=\"$TESSERACT_INSTALL_DIR/lib\"" >> $ENVSCRIPT
 echo "export TESSDATA_PREFIX=\"$TESSERACT_INSTALL_DIR/data\"" >> $ENVSCRIPT
 
 source $ENVSCRIPT
+
+echo "call tesseract cli"
+tesseract
