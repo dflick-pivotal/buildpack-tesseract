@@ -14,7 +14,7 @@ TESSERACT_OCR_VERSION=3.03
 BUILDPACK_DIR=$(dirname $(readlink -f ${BASH_SOURCE%/*}))
 echo "-----> tesseract buildpack version $(cat $BUILDPACK_DIR/VERSION)"
 
-TESSERACT_OCR_TGZ=tesseract-$TESSERACT_OCR_VERSION.tar.gz
+TESSERACT_OCR_TGZ=tesseract-ocr-$TESSERACT_OCR_VERSION.tar.gz
 
 
 TESSERACT_INSTALL_DIR=$DEPS_DIR/$DEPS_IDX/tesseract-ocr
