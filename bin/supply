@@ -17,7 +17,6 @@ TESSERACT_OCR_DATA_VERSION=3.04.00
 TESSERACT_OCR_TGZ=tesseract-ocr-$TESSERACT_OCR_VERSION.tar.gz
 
 INSTALL_DIR=$BUILD_DIR/vendor/tesseract-ocr/
-INSTALL_DIR_TRAINING_DATA=$BUILD_DIR/vendor/tessdata
 INCLUDE_DIR=$BUILD_DIR/vendor/tesseract-ocr/include
 LIB_DIR=$BUILD_DIR/vendor/tesseract-ocr/lib
 TRAINING_DATA_DIR=${HOME}/vendor
@@ -26,9 +25,24 @@ ENVSCRIPT=$BUILD_DIR/.profile.d/tesseract-ocr.sh
 
 TESSERACT_OCR_LANGUAGES=eng
 
-# create jfoss lib and conf folder
+# create tesseract lib and more folders
 TESSERACT_DEPS="${DEPS_DIR}/${DEPS_IDX}"
 mkdir -p $TESSERACT_DEPS
 
 echo "Unpacking Tesseract-OCR binaries"
 tar -zxvf $BUILDPACK_DIR/$TESSERACT_OCR_TGZ -C $TESSERACT_DEPS
+
+echo 'Getting Tesseract-OCR training data'
+mkdir -p $TESSERACT_DEPS/data
+if [ $TESSERACT_OCR_LANGUAGES ]
+then
+   array=(${TESSERACT_OCR_LANGUAGES//,/ })
+   for i in "${!array[@]}"
+   do
+     lang="${array[i]}"
+     echo $lang 'training data'
+     curl https://raw.githubusercontent.com/tesseract-ocr/tessdata/$TESSERACT_OCR_DATA_VERSION/$lang.traineddata > $TESSERACT_DEPS/data/$lang.traineddata
+   done
+fi
+
+
