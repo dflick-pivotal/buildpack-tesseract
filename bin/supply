@@ -37,3 +37,5 @@ mkdir -p $BUILD_DIR/.profile.d
 echo "export PATH=\"$TESSERACT_INSTALL_DIR/bin:\$PATH\"" > $ENVSCRIPT
 echo "export LD_LIBRARY_PATH=\"$TESSERACT_INSTALL_DIR/lib:\$LD_LIBRARY_PATH\"" >> $ENVSCRIPT
 echo "export TESSDATA_PREFIX=\"$TESSERACT_INSTALL_DIR/data/\"" >> $ENVSCRIPT
+
+source $ENVSCRIPT
