@@ -34,7 +34,7 @@ cp $BUILDPACK_DIR/resources/ocr-data/* $TESSERACT_DATA_DIR
 
 echo "Building runtime environment for Tesseract-OCR"
 mkdir -p $BUILD_DIR/.profile.d
-echo "export PATH=\"$PATH\:$TESSERACT_INSTALL_DIR/bin\"" > $ENVSCRIPT
+echo "export PATH=\"$PATH:$TESSERACT_INSTALL_DIR/bin\"" > $ENVSCRIPT
 echo "export LD_LIBRARY_PATH=\"$TESSERACT_INSTALL_DIR/lib\"" >> $ENVSCRIPT
 echo "export TESSDATA_PREFIX=\"$TESSERACT_INSTALL_DIR/data\"" >> $ENVSCRIPT
 
