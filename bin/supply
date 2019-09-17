@@ -40,5 +40,5 @@ echo "export TESSDATA_PREFIX=\"$TESSERACT_INSTALL_DIR/data\"" >> $ENVSCRIPT
 
 source $ENVSCRIPT
 
-echo "call tesseract cli"
-tesseract
+#echo "call tesseract cli"
+#tesseract
